@@ -40,6 +40,7 @@ import { CreatorSettingsCard } from "./CreatorSettingsCard.tsx";
 import type { CreatorViewFace } from "./face.ts";
 import { en, NS, type CreatorKey, zh } from "./locales.ts";
 import { OilSidebarRoot } from "./sidebar/OilSidebarRoot.tsx";
+import { startSidebarSession } from "./sidebar/startSession.ts";
 import type { OilSidebarInjected, OilSidebarSlotProps } from "./sidebar/slots.ts";
 import {
   registerCreatorSettingsCard,
@@ -297,7 +298,7 @@ export function apply(ctx: ClientContext): void {
 
   const injectSidebar = (): OilSidebarInjected => ({
     startSession: (workspaceId?: WorkspaceId) => {
-      ctx.workspaces.startSession(workspaceId);
+      startSidebarSession(ctx, workspaceId);
     },
     toggleSidebar: () => {
       ctx.layout.toggleSidebar();

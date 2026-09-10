@@ -155,3 +155,10 @@ ego-browser nodejs < scripts/collect-publish.mjs
 - 重媒体继续调用已有脚本，参数与对应 SKILL.md 保持一致。
 - 人导出、人点平台发布、Agent 做校对和标题，这三件事不要改成全自动。
 - Host remote 或工具改完后要重新 `pnpm build` 并重启 `dsh web`。
+
+
+### 新建会话接口兼容
+
+侧栏新建会话的版本回归基线（2026-09-10）：本地编译依赖为 `0.1.1-rc.2`，实际使用的是 DSH Desktop `2.0.5`、`web` profile，桌面安装包内置 Harness `0.1.2-rc.1`。本地 Harness 仓库 HEAD 为 `47f943859bef60e4160492346772ded9b24f765a`，接口判断以桌面安装产物为准。旧版调用 `workspaces.startSession`，新版官方侧栏调用 `uiWorkspace.startSession`；插件通过 `sidebar/startSession.ts` 在点击时解析服务，优先新版并保留旧版入口，不复制宿主的工作区选择、空会话复用和导航策略。
+
+升级验收必须对照实际宿主的官方侧栏和服务实现，不能只依赖项目锁定版本的类型检查。`sidebarStartSession.test.ts` 覆盖新版控制器不含旧方法、旧版透传工作区、服务方法接收者、失败不重复创建及服务重新解析；入口契约测试同时防止绕过适配器。未进行人工点击或授权的界面验收时，不能把代码测试表述为按钮已在实际窗口验证。
