@@ -36,7 +36,7 @@ function coverLines(capabilities: CreatorSetupStatus["capabilities"]): string[] 
     lines.push("- 缺 oil-cover：征得用户同意后执行 `git clone https://github.com/oil-oil/oil-cover ~/.agents/skills/oil-cover`，装完重新调用 oil_creator_setup 确认。");
   }
   if (capabilities.coverCredential.state !== "ready") {
-    lines.push("- 缺 ZENMUX_API_KEY：让用户到 ZenMux（https://zenmux.ai）控制台申请，在 设置 → 插件 → 内容工作台 填写；不要让用户把 Key 明文发到对话里。");
+    lines.push("- 缺 ARK_API_KEY：让用户到火山方舟控制台（https://console.volcengine.com/ark）申请，在 设置 → 插件 → 内容工作台 填写；不要让用户把 Key 明文发到对话里。");
   }
   return lines.length === 0 ? ["- 当前封面能力可用。"] : lines;
 }
@@ -71,7 +71,7 @@ export function creatorGuideText(status: CreatorSetupStatus): string {
     capabilityLine("字幕工作流 oil-subtitle", capabilities.subtitleSkill),
     capabilityLine("字幕凭据 DASHSCOPE_API_KEY", capabilities.subtitleCredential),
     capabilityLine("封面工作流 oil-cover", capabilities.coverSkill),
-    capabilityLine("封面凭据 ZENMUX_API_KEY", capabilities.coverCredential),
+    capabilityLine("封面凭据 ARK_API_KEY", capabilities.coverCredential),
     capabilityLine("Ego Browser（自动发布与数据回收）", capabilities.publishSync),
     capabilityLine("剪辑 skill screen-studio-editor", capabilities.editingSkill),
     capabilityLine("发布 skill video-publisher", capabilities.publishSkill),

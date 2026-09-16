@@ -61,5 +61,5 @@ export async function resolveCreatorSecret(
 }
 
 export function secretEnv(kind: SecretKind, value: string): Record<string, string> {
-  return { [kind === "subtitle" ? "DASHSCOPE_API_KEY" : "ZENMUX_API_KEY"]: value };
+  return { [kind === "subtitle" ? "DASHSCOPE_API_KEY" : "ARK_API_KEY"]: value };
 }

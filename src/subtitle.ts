@@ -177,7 +177,7 @@ export function spawnPython(
 ): ChildProcess {
   const env = { ...process.env };
   delete env.DASHSCOPE_API_KEY;
-  delete env.ZENMUX_API_KEY;
+  delete env.ARK_API_KEY;
   if (extraEnv !== undefined) Object.assign(env, extraEnv);
   return spawn(python, [script, ...args], {
     env,

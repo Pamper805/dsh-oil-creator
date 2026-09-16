@@ -199,7 +199,7 @@ function recommendationsOf(capabilities: CreatorCapabilities): string[] {
   }
   if (capabilities.subtitleCredential.state !== "ready") recommendations.push("字幕 Key：到百炼控制台（https://bailian.console.aliyun.com）申请 DASHSCOPE_API_KEY，在设置页填写。");
   if (capabilities.coverSkill.state !== "ready") recommendations.push("封面：git clone https://github.com/oil-oil/oil-cover ~/.agents/skills/oil-cover");
-  if (capabilities.coverCredential.state !== "ready") recommendations.push("封面 Key：到 ZenMux（https://zenmux.ai）控制台申请 ZENMUX_API_KEY，在设置页填写。");
+  if (capabilities.coverCredential.state !== "ready") recommendations.push("封面 Key：到火山方舟控制台（https://console.volcengine.com/ark）申请 ARK_API_KEY，在设置页填写。");
   if (capabilities.publishSync.state !== "ready") {
     recommendations.push(
       capabilities.publishSync.detail.includes("PATH")

@@ -122,7 +122,7 @@ describe("OilCreatorService.startSubtitleGenerate", () => {
     probe.ctx = {
       get: () => ({
         resolve: async (ref: string) => {
-          if (ref === "ZENMUX_API_KEY") throw new Error("cover credential must not be requested");
+          if (ref === "ARK_API_KEY") throw new Error("cover credential must not be requested");
           return ref === "DASHSCOPE_API_KEY" ? { value: "subtitle-key" } : undefined;
         },
         describe: async () => ({ configured: true, writable: false }),
@@ -157,7 +157,7 @@ describe("OilCreatorService.startChainedJob", () => {
 
     await service.startChainedJob("demo", "subtitleJob", {
       python: "/tmp/python",
-      env: { DASHSCOPE_API_KEY: "dash", ZENMUX_API_KEY: "zen" },
+      env: { DASHSCOPE_API_KEY: "dash", ARK_API_KEY: "zen" },
       steps: [
         { script: "bailian_transcribe.py", args: [], output: "transcript", env: "subtitle" },
         { script: "review_subtitles.py", args: [], output: "reviewed", env: "subtitle" },

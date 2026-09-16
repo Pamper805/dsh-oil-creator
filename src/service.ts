@@ -1008,7 +1008,7 @@ function envForGenerateStep(
   const key = kind === "subtitle"
     ? "DASHSCOPE_API_KEY"
     : kind === "cover"
-      ? "ZENMUX_API_KEY"
+      ? "ARK_API_KEY"
       : undefined;
   if (key === undefined || env === undefined || env[key] === undefined) return undefined;
   return { [key]: env[key] };

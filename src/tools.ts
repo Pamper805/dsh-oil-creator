@@ -439,7 +439,7 @@ export function registerCreatorTools(ctx: ToolsContext, service: OilCreatorServi
     description:
       "Generate 3x4 / 4x3 / 16x9 covers with oil-cover. "
       + "Extract a cover title first from the episode script or subtitles (oil-cover rule: do not leave this to the image model). "
-      + "Pass that title. Requires ZENMUX_API_KEY in Settings → Plugins → 内容工作台. "
+      + "Pass that title. Requires ARK_API_KEY (Volcengine Ark) in Settings → Plugins → 内容工作台. "
       + "Returns immediately. When finished, the episode folder has *_3x4.png / *_4x3.png / *_16x9.png.",
     parameters: {
       id: { type: "string", required: true, description: "Folder id." },

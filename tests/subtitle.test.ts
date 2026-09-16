@@ -150,7 +150,7 @@ describe("spawnPython", () => {
   }> {
     const folder = await mkdtemp(join(tmpdir(), "oil-spawn-env-"));
     const output = join(folder, "env.json");
-    const script = `require("node:fs").writeFileSync(${JSON.stringify(output)}, JSON.stringify({ dash: process.env.DASHSCOPE_API_KEY, zen: process.env.ZENMUX_API_KEY, path: process.env.PATH }));`;
+    const script = `require("node:fs").writeFileSync(${JSON.stringify(output)}, JSON.stringify({ dash: process.env.DASHSCOPE_API_KEY, zen: process.env.ARK_API_KEY, path: process.env.PATH }));`;
     const child = spawnPython(process.execPath, "-e", [script], extraEnv);
     await new Promise<void>((resolve, reject) => {
       child.once("error", reject);
@@ -168,14 +168,14 @@ describe("spawnPython", () => {
 
   it("keeps ordinary env, strips global plugin keys, and honors explicit step keys", async () => {
     const previousDash = process.env.DASHSCOPE_API_KEY;
-    const previousZen = process.env.ZENMUX_API_KEY;
+    const previousZen = process.env.ARK_API_KEY;
     process.env.DASHSCOPE_API_KEY = "global-dash";
-    process.env.ZENMUX_API_KEY = "global-zen";
+    process.env.ARK_API_KEY = "global-zen";
     try {
       const none = await childEnv();
       const preview = await childEnv();
       const subtitle = await childEnv({ DASHSCOPE_API_KEY: "step-dash" });
-      const cover = await childEnv({ ZENMUX_API_KEY: "step-zen" });
+      const cover = await childEnv({ ARK_API_KEY: "step-zen" });
 
       expect(none.dash).toBeUndefined();
       expect(none.zen).toBeUndefined();
@@ -189,8 +189,8 @@ describe("spawnPython", () => {
     } finally {
       if (previousDash === undefined) delete process.env.DASHSCOPE_API_KEY;
       else process.env.DASHSCOPE_API_KEY = previousDash;
-      if (previousZen === undefined) delete process.env.ZENMUX_API_KEY;
-      else process.env.ZENMUX_API_KEY = previousZen;
+      if (previousZen === undefined) delete process.env.ARK_API_KEY;
+      else process.env.ARK_API_KEY = previousZen;
     }
   });
 });

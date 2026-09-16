@@ -25,7 +25,7 @@ DeepSeek Harness 打开后，左侧切到「内容」，中间是一条片子的
 
 右边输入 `@`，可以选择「当前详情」或搜以前的片子。发出去的是那一期的文件夹路径，封面、脚本、字幕都在里面，按 [files.md](files.md) 自己去列、去读。`/current content` 同样只带当前打开那条的文件夹路径。
 
-设置在 Harness 的设置 → 插件 → 内容工作台。这里可以配置影片目录、`enabledPlatforms`、脚本规则（人设）和凭据。影片目录默认是 `~/Movies/视频项目`。`enabledPlatforms` 有小红书、抖音、B 站、视频号四个开关，默认全部启用；AI 发布和数据同步只处理启用的平台，全部关闭时不执行这两项操作。脚本规则是写 `script.md` 时 AI 必须遵循的语气、结构和禁忌，也可以直接在对话里让 AI 记录，AI 会用 `oil_script_rules` 存到同一个地方。字幕转录使用百炼 `DASHSCOPE_API_KEY`，封面使用 ZenMux `ZENMUX_API_KEY`，两者和视觉识别共用官方凭据；页面只显示已配置或未配置，不会把 Key 读回来。
+设置在 Harness 的设置 → 插件 → 内容工作台。这里可以配置影片目录、`enabledPlatforms`、脚本规则（人设）和凭据。影片目录默认是 `~/Movies/视频项目`。`enabledPlatforms` 有小红书、抖音、B 站、视频号四个开关，默认全部启用；AI 发布和数据同步只处理启用的平台，全部关闭时不执行这两项操作。脚本规则是写 `script.md` 时 AI 必须遵循的语气、结构和禁忌，也可以直接在对话里让 AI 记录，AI 会用 `oil_script_rules` 存到同一个地方。字幕转录使用百炼 `DASHSCOPE_API_KEY`，封面使用火山方舟 `ARK_API_KEY`（豆包 Seedream），两者和视觉识别共用官方凭据；页面只显示已配置或未配置，不会把 Key 读回来。
 
 首次使用推荐选 Harness 的 `standard` 或 `code` Agent preset，再直接说「检查并配置内容工作台」。内置 `creator-workbench` Skill 会让 AI 先调用 `oil_creator_setup` 检查环境。AI 能从系统发现的目录和能力不再逐项追问；任何写入都会先预览，用户确认后才应用。`minimal` preset 没有 Skill 和文件工具，不适合首次引导、自动整理目录或修改正文。
 
