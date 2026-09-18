@@ -46,12 +46,22 @@ function normalizeTitle(value) {
   return String(value || "").toLowerCase().replace(/[^\p{L}\p{N}]+/gu, "");
 }
 
+function commonPrefixLength(left, right) {
+  const limit = Math.min(left.length, right.length);
+  let index = 0;
+  while (index < limit && left[index] === right[index]) index += 1;
+  return index;
+}
+
 function titleScore(local, remote) {
   const left = normalizeTitle(local);
   const right = normalizeTitle(remote);
   if (left === "" || right === "") return 0;
   if (left === right) return 1;
   if (left.includes(right) || right.includes(left)) return 0.88;
+  const shorterPeek = left.length < right.length ? left : right;
+  const sharedPrefix = commonPrefixLength(left, right);
+  if (sharedPrefix >= 10 && sharedPrefix / shorterPeek.length >= 0.4) return 0.9;
   const shorter = left.length < right.length ? left : right;
   const longer = left.length < right.length ? right : left;
   let hits = 0;

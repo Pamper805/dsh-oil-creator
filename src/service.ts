@@ -644,6 +644,7 @@ export class OilCreatorService extends TypertRemoteService {
       scoped.map((item) => ({
         id: item.id,
         title: item.title,
+        ...(item.publishTitle === undefined ? {} : { titles: [item.publishTitle] }),
         known: knownFromPublish(item.publish),
       })),
       collected.collected,

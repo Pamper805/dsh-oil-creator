@@ -81,6 +81,8 @@ export interface ContentSummary {
   id: string;
   folderPath: string;
   title: string;
+  /** publish-package.json 里的发布标题，仅用于同步匹配，不参与界面显示。 */
+  publishTitle?: string | undefined;
   date?: string;
   recordedAt: number;
   createdMs: number;

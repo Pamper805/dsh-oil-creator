@@ -240,6 +240,13 @@ async function scanFolder(
   const packagePath = packageName === undefined ? undefined : join(folderPath, packageName);
   const packageJson = packagePath === undefined ? undefined : await readJson(packagePath);
   const overlayTitle = overlay.items[folderName]?.title;
+  const packageTitleValue = (packageJson as { title?: unknown } | undefined)?.title;
+  // 发布标题只做同步匹配的候选，不顶替界面显示名（title 仍是台账记录或文件夹名）。
+  // 文件夹名是本地内部叫法，和平台发布标题往往毫无共同字符，只拿它去匹配会让整集
+  // 永远同步不上（2026-09-18 实测：44 条作品抓回来了，这一集 0 匹配）。
+  const publishTitle = typeof packageTitleValue === "string" && packageTitleValue.trim() !== ""
+    ? packageTitleValue.trim()
+    : undefined;
   const title = overlayTitle ?? folderTitle;
 
   const tags = [
@@ -282,6 +289,7 @@ async function scanFolder(
     createdMs,
     covers,
     subtitles,
+    publishTitle,
     hasPublishPackage: packageJson !== undefined,
     hasArticle: articlePath !== undefined,
     waitingForExport: overlayItem?.waitingForExport === true,

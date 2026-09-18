@@ -34,6 +34,26 @@ describe("titleScore", () => {
   it("scores a contained title high enough to match", () => {
     expect(titleScore("DeepSeek Harness 安装上手", "DeepSeek Harness")).toBeGreaterThanOrEqual(0.85);
   });
+
+  it("matches a platform-rewritten title through the shared prefix", () => {
+    // 抖音会把发布标题改写成「原标题 + 栏目词/热词」。归一化后两条标题互不包含，
+    // 4-gram 覆盖率最高只有 0.7、永远够不到 0.85，只有长公共前缀能救回来，
+    // 否则这条作品每次同步都匹配不上（2026-09-18 实测）。
+    expect(
+      titleScore(
+        "AI Agent开始自己干活了？我把整个视频创作过程交给了它",
+        "AI Agent开始自己干活了？中式美学摄影AI教程出来啦",
+      ),
+    ).toBeGreaterThanOrEqual(0.85);
+  });
+
+  it("still rejects unrelated or too-short titles", () => {
+    expect(
+      titleScore("小满深圳看海", "AI Agent开始自己干活了？中式美学摄影AI教程出来啦"),
+    ).toBeLessThan(0.85);
+    // 短标题之间只共用一个「ai」，前缀长度不足，不能算命中。
+    expect(titleScore("AI教程", "AI摄影")).toBeLessThan(0.85);
+  });
 });
 
 describe("matchCollected", () => {

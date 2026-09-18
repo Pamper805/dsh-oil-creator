@@ -34,12 +34,34 @@ export function normalizeTitle(value: string): string {
   return value.toLowerCase().replace(/[^\p{L}\p{N}]+/gu, "");
 }
 
+export function commonPrefixLength(left: string, right: string): number {
+  const limit = Math.min(left.length, right.length);
+  let index = 0;
+  while (index < limit && left[index] === right[index]) index += 1;
+  return index;
+}
+
+/** 平台改写标题（追加栏目词/热词、截断）时，公共前缀依然很长，用它兜底。 */
+export const REWRITTEN_TITLE_SCORE = 0.9;
+const REWRITE_PREFIX_MIN = 10;
+const REWRITE_PREFIX_RATIO = 0.4;
+
 export function titleScore(local: string, remote: string): number {
   const left = normalizeTitle(local);
   const right = normalizeTitle(remote);
   if (left === "" || right === "") return 0;
   if (left === right) return 1;
   if (left.includes(right) || right.includes(left)) return 0.88;
+  const shorterPeek = left.length < right.length ? left : right;
+  const sharedPrefix = commonPrefixLength(left, right);
+  if (
+    sharedPrefix >= REWRITE_PREFIX_MIN
+    && sharedPrefix / shorterPeek.length >= REWRITE_PREFIX_RATIO
+  ) {
+    // 4-gram 覆盖率最高只有 0.7，永远够不到 0.85 的阈值；平台改写标题的场景
+    // 只能靠长公共前缀识别，否则整条作品永远匹配不上。
+    return REWRITTEN_TITLE_SCORE;
+  }
   const shorter = left.length < right.length ? left : right;
   const longer = left.length < right.length ? right : left;
   let hits = 0;
@@ -56,6 +78,8 @@ export function matchCollected(
   items: ReadonlyArray<{
     id: string;
     title: string;
+    /** 额外候选标题（如发布包里的发布标题）；任一命中即算匹配。 */
+    titles?: readonly string[];
     known?: Partial<Record<PublishPlatform, { remoteId?: string; url?: string }>>;
   }>,
   platforms: readonly CollectedPlatform[],
@@ -72,9 +96,13 @@ export function matchCollected(
         const key = keyOf(post);
         if (used.has(key)) continue;
         let score = 0;
+        const candidates = [item.title, ...(item.titles ?? [])].filter((value) => value.trim() !== "");
         if (known?.remoteId !== undefined && post.remoteId === known.remoteId) score = 1;
         else if (known?.url !== undefined && post.url === known.url) score = 0.99;
-        else score = titleScore(item.title, post.title);
+        else score = candidates.reduce(
+          (best, candidate) => Math.max(best, titleScore(candidate, post.title)),
+          0,
+        );
         if (score < minScore) continue;
         if (best === undefined || score > best.score) {
           best = { id: item.id, platform: page.platform, post, score };
